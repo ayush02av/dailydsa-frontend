@@ -15,7 +15,7 @@ export default function Profile() {
                 domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN}
                 clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENTID}
                 authorizationParams={{
-                    redirect_uri: `${window?.location?.origin}/handler`
+                    redirect_uri: `${process.env.NEXT_PUBLIC_SERVER_URL}/handler`
                 }}
             >
                 <LogoutButton />
