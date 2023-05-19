@@ -1,41 +1,14 @@
 "use client"
 import { useAuth0 } from "@auth0/auth0-react"
 import { useRouter } from "next/navigation"
-import CryptoJS from "crypto-js"
 import { useEffect } from "react"
 import { context } from "../context"
 import { useContext } from "react"
-
-function base64url(source) {
-    return CryptoJS.enc.Base64
-        .stringify(source)
-        .replace(/=+$/, '')
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-}
-
-function encode(data) {
-    return base64url(CryptoJS.enc.Utf8.parse(JSON.stringify(data)))
-}
-
-function encrypt(data, secret) {
-    return base64url(CryptoJS.HmacSHA256(data, secret))
-}
-
-function getToken(data) {
-    var header = {
-        "alg": "HS256",
-        "typ": "JWT"
-    }
-
-    var token = encode(header) + "." + encode(data)
-    token = token + "." + encrypt(token, process.env.NEXT_PUBLIC_TEMP_JWT_SECRET)
-
-    return token
-}
+import Cookies from "js-cookie"
+import axios from "axios"
 
 export default function Handler() {
-    const { user, isAuthenticated, isLoading } = useAuth0()
+    const { isAuthenticated, isLoading, getIdTokenClaims } = useAuth0()
     const { setProfile } = useContext(context)
 
     const router = useRouter()
@@ -43,18 +16,39 @@ export default function Handler() {
     useEffect(function () {
         if (!isLoading) {
             if (isAuthenticated) {
+                getIdTokenClaims()
+                    .then(function (response) {
+                        axios.post(
+                            `${process.env.NEXT_PUBLIC_API_URL}/auth/entry`,
+                            {
+                                'token': response.__raw
+                            }
+                        )
+                            .then(function (response) {
+                                Cookies.set('token', response.data.token)
+                                setProfile(response.data)
+                            })
+                            .catch(function (error) {
+                                console.log(error)
+                            })
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
                 router.push('/dashboard')
-                setProfile(user)
             }
-            else router.push('/')
+            else {
+                console.log('not auth')
+                router.push('/')
+            }
         }
-    }, [isLoading, user, isAuthenticated])
+    }, [isLoading, isAuthenticated])
 
     return (
         <>
             {
                 isLoading &&
-                <div>Loading...</div>
+                <div>Authenticating...</div>
             }
         </>
     )

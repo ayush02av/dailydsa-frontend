@@ -23,9 +23,9 @@ export default function Profile() {
 
             {profile && (
                 <div className="mt-5">
-                    <div className="">{profile.nickname}</div>
+                    <div className="">{profile.username}</div>
                     <Image width={110} height={110} alt="" src={profile.picture} />
-                    <div className="mt-2 text-lg">{profile.given_name} {profile.family_name}</div>
+                    <div className="mt-2 text-lg">{profile.first_name} {profile.last_name}</div>
                 </div>
             )}
 
