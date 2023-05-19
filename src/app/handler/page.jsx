@@ -27,15 +27,16 @@ export default function Handler() {
                             .then(function (response) {
                                 Cookies.set('token', response.data.token)
                                 setProfile(response.data)
+                                router.push('/dashboard')
                             })
                             .catch(function (error) {
                                 console.log(error)
+                                router.push('/')
                             })
                     })
                     .catch(function (error) {
                         console.log(error)
                     })
-                router.push('/dashboard')
             }
             else {
                 console.log('not auth')

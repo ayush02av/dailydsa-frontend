@@ -13,6 +13,7 @@ export default function DashboardMiddleware() {
     useEffect(function () {
         if (!loading) {
             const token = Cookies.get('token')
+            console.log('token', token)
 
             if (token == null || token == undefined)
                 router.push('/')

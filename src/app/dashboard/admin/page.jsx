@@ -47,6 +47,8 @@ export default function Admin() {
 
     return (
         <div className="text-center md:px-20">
+            Admin Add Question
+            <br /><br />
             <input
                 type="text"
                 className="md:w-3/4 px-6 py-2 outline-none rounded bg-gray-100 text-black"
