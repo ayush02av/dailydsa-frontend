@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useContext } from "react"
+import { useEffect, useContext, useState } from "react"
 import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
 import axios from "axios"
@@ -7,30 +7,32 @@ import { context } from "../context"
 
 export default function DashboardMiddleware() {
     const router = useRouter()
+    const [loading, setLoading] = useState(false)
     const { setProfile } = useContext(context)
 
     useEffect(function () {
-        const token = Cookies.get('token')
+        if (!loading) {
+            const token = Cookies.get('token')
 
-        if (token == null || token == undefined)
-            router.push('/')
+            if (token == null || token == undefined)
+                router.push('/')
 
-        axios.get(
-            `${process.env.NEXT_PUBLIC_API_URL}/user/profile`,
-            {
-                headers: {
-                    token: token
+            axios.get(
+                `${process.env.NEXT_PUBLIC_API_URL}/user/profile`,
+                {
+                    headers: {
+                        token
+                    }
                 }
-            }
-        )
-            .then(function (response) {
-                setProfile(response.data)
-            })
-            .catch(function (error) {
-                console.log(error)
-            })
-
-    })
+            )
+                .then(function (response) {
+                    setProfile(response.data)
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+        }
+    }, [loading])
 
     return null
 }
