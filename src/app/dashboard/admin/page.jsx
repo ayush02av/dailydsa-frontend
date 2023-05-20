@@ -24,7 +24,7 @@ export default function Admin() {
         const token = Cookies.get('token')
 
         axios.post(
-            `https://dailydsatrackerapi.up.railway.app/admin/add/`,
+            `${process.env.NEXT_PUBLIC_API_URL}/admin/add/`,
             {
                 questionLink,
                 solutionLink,
