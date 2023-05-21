@@ -47,7 +47,7 @@ export default function Admin() {
 
     return (
         <div className="text-center md:px-20">
-            Admin Add Question
+            Add Question
             <br /><br />
             <input
                 type="text"

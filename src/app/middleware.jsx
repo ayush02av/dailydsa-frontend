@@ -3,20 +3,20 @@ import { useEffect, useContext, useState } from "react"
 import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
 import axios from "axios"
-import { context } from "../context"
+import { context } from "./context"
 
-export default function DashboardMiddleware() {
+export default function Middleware() {
     const router = useRouter()
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const { setProfile } = useContext(context)
 
     useEffect(function () {
-        if (!loading) {
+        if (loading) {
             const token = Cookies.get('token')
-            console.log('token', token)
 
             if (token == null || token == undefined)
-                router.push('/')
+                if (window.location.pathname.startsWith('/dashboard'))
+                    router.push('/')
 
             axios.get(
                 `${process.env.NEXT_PUBLIC_API_URL}/user/profile`,
@@ -28,6 +28,7 @@ export default function DashboardMiddleware() {
             )
                 .then(function (response) {
                     setProfile(response.data)
+                    setLoading(false)
                 })
                 .catch(function (error) {
                     console.log(error)
