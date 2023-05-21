@@ -31,14 +31,13 @@ export default function Daily() {
 
     return (
         <div
-            className="bg-blue-400 text-white px-5 py-2 m-5 mt-0"
+            className="px-5 py-2 m-5 mt-0"
         >
-            Daily
-            <br />
+            <div className="text-xl font-bold mb-5">Daily Challenge</div>
             {
                 questions && questions.map(function (question, index) {
                     return (
-                        <a key={index} href={question.question_link} target="_blank" className="block ml-5 hover:underline">
+                        <a key={index} href={`/dashboard/challenge/${question.id}`} className="block ml-5 hover:underline">
                             {difficultyLevels[question.difficulty_level - 1]}: {getShort(question.question_link)}
                         </a>
                     )
