@@ -15,6 +15,8 @@ export default function Add() {
     const [solutionLink, setSolutionLink] = useState('')
     const [difficultyLevel, setDifficultyLevel] = useState(1)
 
+    const [buttonAvailable, setButtonAvailable] = useState(true)
+
     useEffect(function () {
         if (!profile) router.push('/')
         else if (!profile.is_admin) router.push('/dashboard/profile')
@@ -22,7 +24,7 @@ export default function Add() {
 
     function handleSubmit() {
         const token = Cookies.get('token')
-
+        setButtonAvailable(false)
         axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/admin/add/`,
             {
@@ -37,6 +39,7 @@ export default function Add() {
             }
         )
             .then(function (response) {
+                setButtonAvailable(true)
                 window.alert('Added')
                 router.push('/dashboard')
             })
@@ -76,12 +79,13 @@ export default function Add() {
             />
             <br /><br />
             <br /><br />
-            <span
-                className="px-6 py-3 cursor-pointer hover:border-blue hover:border rounded bg-blue-400 text-white"
+            <button
+                className={`px-6 py-3 cursor-pointer rounded bg-blue-400 text-white ${!buttonAvailable && `opacity-50`}`}
                 onClick={handleSubmit}
+                disabled={!buttonAvailable}
             >
                 Submit
-            </span>
+            </button>
         </div>
     )
 }

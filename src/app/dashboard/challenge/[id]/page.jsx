@@ -11,6 +11,8 @@ export default function Challenge() {
     const [question, setQuestion] = useState(null)
     const [submissionLink, setSubmissionLink] = useState('')
 
+    const [buttonAvailable, setButtonAvailable] = useState(true)
+
     useEffect(function () {
         if (!question)
             axios.get(
@@ -22,7 +24,7 @@ export default function Challenge() {
 
     function handleSubmit() {
         const token = Cookies.get('token')
-
+        setButtonAvailable(false)
         axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/user/add/`,
             {
@@ -36,6 +38,7 @@ export default function Challenge() {
             }
         )
             .then(function (response) {
+                setButtonAvailable(true)
                 window.alert('Added')
                 router.push('/dashboard')
             })
@@ -62,8 +65,9 @@ export default function Challenge() {
                     />
 
                     <div
-                        className="bg-black text-white inline-block mt-5 px-6 py-3 cursor-pointer rounded"
+                        className={`bg-black text-white inline-block mt-5 px-6 py-3 cursor-pointer rounded ${!buttonAvailable && `opacity-50`}`}
                         onClick={handleSubmit}
+                        disabled={!buttonAvailable}
                     >
                         Submit
                     </div>
