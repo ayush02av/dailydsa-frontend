@@ -29,8 +29,7 @@ export default function History() {
 
     return (
         <div
-            className="px-5 py-2 m-5"
-            style={{ height: '80px' }}
+            className="px-5 py-2 md:m-5"
         >
             <div className="text-xl font-bold mb-5">My Submissions</div>
             <div className="font-semibold mb-5">Today:</div>
